@@ -50,21 +50,16 @@ class Databaser:
         self.cursor.execute('UPDATE videos SET dislikes = dislikes + 1 WHERE id =?', (video_id,))
 
     def get_videos(self):
-self.cursor.execute('SELECT * FROM videos WHERE id = ?', (video_id,))
-    r = self.cursor.fetchone()
+        self.cursor.execute('SELECT * FROM videos')
+        videos = self.cursor.fetchall()
 
-    if not r:
-        return
+        videos = list(map(dict, videos))
+        videos.sort(key=lambda x: (x['likes'] or 0) - (x['dislikes'] or 0), reverse=True)
 
-    video_dict = dict(r)
-    
-    video_dict['likes'] = video_dict['likes'] or 0
-    video_dict['dislikes'] = video_dict['dislikes'] or 0
-    
-    return video_dict
+        return videos
+
 
 if __name__ == '__main__':
     db = Databaser()
     db.add_video('Как устроен PNG', 'Описание потом придумаю', 'eleday')
     db.add_video('Автомонтаж видео на Python', 'Описание потом придумаю', 'eleday')
-
