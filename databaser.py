@@ -54,7 +54,7 @@ class Databaser:
         videos = self.cursor.fetchall()
 
         videos = list(map(dict, videos))
-        videos.sort(key=lambda x: x['likes'] - x['dislikes'], reverse=True)
+        videos.sort(key=lambda x: (x['likes'] or 0) - (x['dislikes'] or 0), reverse=True)
 
         return videos
 
