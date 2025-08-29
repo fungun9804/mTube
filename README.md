@@ -1,1 +1,1 @@
-MyTube - простой шуточный аналог ютубу на Python, Flask. Видео: https://youtu.be/mHpeo8iVvPw
+mTube - модернизация проекта. Видео автора: https://youtu.be/mHpeo8iVvPw
