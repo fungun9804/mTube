@@ -9,8 +9,7 @@ from flask import Flask, request, jsonify, render_template
 app = flask.Flask(__name__)
 db = Databaser()
 
-# ====== КОД КОММЕНТАРИЕВ - ВСТАВЬ ЗДЕСЬ ======
-# Создаем папку для комментариев если ее нет
+
 COMMENTS_DIR = os.path.join('static', 'comments')
 if not os.path.exists(COMMENTS_DIR):
     os.makedirs(COMMENTS_DIR)
@@ -36,8 +35,8 @@ def add_comment(video_id, author, text):
 def get_comments(video_id):
     comment_file = get_comment_file_path(video_id)
     comments = []
+
     
-    # Если файла нет - возвращаем пустой список
     if not os.path.exists(comment_file):
         print(f"Comment file not found: {comment_file}")
         return comments
@@ -95,7 +94,7 @@ def dislike_video(video_id):
 @app.route('/video/<int:video_id>/comments', methods=['GET'])
 def get_comments_route(video_id):
     try:
-        comments = get_comments(video_id)  # используем функцию из нашего кода
+        comments = get_comments(video_id)
         return jsonify({'success': True, 'comments': comments})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e), 'comments': []})
@@ -110,34 +109,14 @@ def add_comment_route(video_id):
         if not text:
             return jsonify({'success': False, 'error': 'Комментарий не может быть пустым'})
         
-        comment = add_comment(video_id, author, text)  # используем функцию из нашего кода
+        comment = add_comment(video_id, author, text)
         return jsonify({'success': True, 'comment': comment})
         
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
         
-@app.route('/test_comments/<int:video_id>')
-def test_comments(video_id):
-    return jsonify({'test': 'working', 'video_id': video_id})
-    
-@app.route('/test_comments_real/<int:video_id>')
-def test_comments_real(video_id):
-    #Тестовый роут который имитирует настоящий роут комментариев
-    try:
-        # Просто возвращаем тестовые данные
-        test_comments = [
-            {
-                'id': 1,
-                'author': 'Тестовый пользователь',
-                'text': 'Это тестовый комментарий!', 
-                'timestamp': '2024-01-01T12:00:00'
-            }
-        ]
-        return jsonify({'success': True, 'comments': test_comments})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
     
+
     
